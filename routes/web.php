@@ -6,8 +6,12 @@ use App\Http\Controllers\AccountingPeriodController;
 use App\Http\Controllers\CashBankController;
 use App\Http\Controllers\JournalEntryController;
 use App\Http\Controllers\LedgerController;
+use App\Http\Controllers\ProduksController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
+use App\Models\produk;
 
 Route::get('/', function () {
     return view('frontend');
@@ -25,10 +29,14 @@ Route::middleware([
 
 
 Route::middleware(['auth'])->group(function () {
+    Route::resource('produks', ProduksController::class);
+    Route::post('/kas-bank', [CashBankController::class, 'store'])->name('cashbank.store');
+    Route::resource('suppliers', SupplierController::class);
     Route::resource('accounts', AccountController::class);
+    Route::resource('siswas', SiswaController::class);
     Route::resource('journals', JournalEntryController::class);
     Route::post('transaksi/reset', [JournalEntryController::class,'reset_transaksi'])->name('transaksi.reset');
-    
+
     Route::get('laporan/jurnal-umum', [ReportController::class, 'jurnalUmum'])->name('laporan.jurnal-umum');
     Route::get('laporan/neraca-saldo', [ReportController::class, 'trialBalance'])->name('laporan.neraca-saldo');
     Route::get('laporan/laba-rugi', [ReportController::class, 'incomeStatement'])->name('laporan.laba-rugi');
